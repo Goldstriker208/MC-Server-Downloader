@@ -1,4 +1,0 @@
-server-name = asdf
-mc-version = 1.12.2
-min-ram = 1
-max-ram = 2
