@@ -12,6 +12,7 @@ global min_ram
 global max_ram
 
 
+
 def dl_jar(url: str, dest_folder: str, mc_version: str):
 
     # Create Minecraft Server folder
@@ -25,19 +26,6 @@ def dl_jar(url: str, dest_folder: str, mc_version: str):
     # Download Paper JSON file
     r = requests.get(url, stream=True)
     print("Downloaded File: JSON " + filename)   
-
-    # # Save Paper JSON file to Minecraft Server folder
-    # if r.ok:
-    #     # print("Saved: " + filename + " to", os.path.abspath(file_path))
-    #     with open(file_path, 'wb') as f:
-    #         for chunk in r.iter_content(chunk_size=1024 * 8):
-    #             if chunk:
-    #                 f.write(chunk)
-    #                 f.flush()
-    #                 os.fsync(f.fileno())
-    # else:  # HTTP status code 4XX/5XX
-    #     print("Download failed: status code {}\n{}".format(r.status_code, r.text))
-
 
 
     # Save Paper JSON to file path
