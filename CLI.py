@@ -27,7 +27,6 @@ myBat.close()
 
 
 
-
 # Saves Minecraft Server Info
 file2write=open(dest_folder + "/" + "server-info.txt",'w')
 file2write.write("server-name = " + server_name)
@@ -49,9 +48,5 @@ time.sleep(1)
 os.system("cd " + (os.path.abspath(server_name)))
 subprocess.Popen("explorer /select," + (os.path.abspath(server_name)))
 
-# startserver = str(input("Would you like to start the Minecraft Server [Y/n] : "))
-
-# if startserver == 'y':
-#     pass
-
+#Quit
 sys.exit()

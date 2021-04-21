@@ -21,8 +21,6 @@ def dl_jar(url: str, dest_folder: str, mc_version: str):
         os.makedirs(dest_folder)  # create folder if it does not exist
         print("Created Folder: " + dest_folder)
 
-    # filename = url.split('/')[-1].replace(" ", "_")  # be careful with file names
-    # file_path = os.path.join(dest_folder, filename)
 
     # Download Paper JSON file
     r = requests.get(url, stream=True)
@@ -52,16 +50,9 @@ def dl_jar(url: str, dest_folder: str, mc_version: str):
     open(dest_folder + "/" + jar_file, 'wb').write(r.content)
     print("Saved " + jar_file + " to", os.path.abspath(file_path))
     os.rename(dest_folder + "/" + jar_file, dest_folder + "/" + "paper.jar")
-    # original = 
-    # target = 
 
 
-
-# Ask User Minecraft Server name, version, and min/max RAM
-# server_name = str(input("Minecraft Server Name: "))
-# mc_version = str(input("Minecraft Version: "))
-
-from maingui import mc_version, server_name
+from GUI import mc_version, server_name
 
 # Convert lists to string
 mc_version = ''.join(mc_version)
@@ -77,6 +68,7 @@ max_ram = "2"
 
 # Variables and calls dl_jar function
 json_url = 'https://papermc.io/api/v2/projects/paper/versions/' + mc_version
+mc_paper_versions_json_url = 'https://papermc.io/api/v2/projects/paper/'
 filename = json_url.split('/')[-1].replace(" ", "_")  # be careful with file names
 file_path = os.path.join(dest_folder, filename)
 dl_jar(json_url, dest_folder, mc_version)
@@ -89,8 +81,6 @@ myBat.write(start_java)
 myBat.close()
 
 
-
-
 # Saves Minecraft Server Info
 file2write=open(dest_folder + "/" + "server-info.txt",'w')
 file2write.write("server-name = " + server_name)
@@ -101,13 +91,12 @@ file2write.close()
 
 print("Open the batch file to start your Minecraft Server")
 print(os.path.abspath(server_name))
+
 time.sleep(1)
 os.system("cd " + (os.path.abspath(server_name)))
 subprocess.Popen("explorer /select," + (os.path.abspath(server_name)))
 
-# startserver = str(input("Would you like to start the Minecraft Server [Y/n] : "))
 
-# if startserver == 'y':
-#     pass
 
+# Quit
 sys.exit()

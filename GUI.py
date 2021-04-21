@@ -2,14 +2,11 @@ import tkinter as tk
 import tkinter.messagebox as msgbox
 import sys 
 
-# global file2write
-
 global server_name
 global mc_version
 
 mc_version = []
 server_name = []
-# server_name = ""
 
 class main_menu():
     def __init__(self, master):
@@ -43,10 +40,6 @@ class main_menu():
 class paper_menu:
     def __init__(self, master):
         self.master = master
-        # self.frame = tk.Frame(self.master)
-        # self.quitButton = tk.Button(self.frame, text = '1Quit', width = 25, command = self.command)
-        # self.quitButton.pack()
-        # self.frame.pack()
 
         self.label_text = tk.StringVar()
         self.label_text.set("Minecraft Server Name: ")
