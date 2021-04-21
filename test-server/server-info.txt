@@ -1,4 +1,0 @@
-server-name = test-server
-mc-version = 1.12.2
-min-ram = 2
-max-ram = 2
