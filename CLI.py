@@ -26,7 +26,6 @@ myBat.write(start_java)
 myBat.close()
 
 
-
 # Saves Minecraft Server Info
 file2write=open(dest_folder + "/" + "server-info.txt",'w')
 file2write.write("server-name = " + server_name)

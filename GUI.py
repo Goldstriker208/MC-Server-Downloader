@@ -60,7 +60,6 @@ class paper_menu:
         next_button.pack(side=tk.RIGHT, padx=(0, 20), pady=(0, 20))
 
 
-
     def server_name(self):
         self.master.withdraw()
         toplevel = tk.Toplevel(self.master)

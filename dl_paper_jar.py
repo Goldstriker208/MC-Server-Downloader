@@ -63,7 +63,6 @@ def dl_jar(paper_builds_url: str, mc_paper_versions_url: str, dest_folder: str, 
     mc_paper_versions = readjson_paper_versions.versions + readjson_paper_versions.version_groups
 
     
-
     def check_vaild_mc_version():
         vaild_mc_version = None
         for mc_paper_version in mc_paper_versions:
@@ -152,7 +151,6 @@ print(os.path.abspath(server_name))
 time.sleep(1)
 os.system("cd " + (os.path.abspath(server_name)))
 subprocess.Popen("explorer /select," + (os.path.abspath(server_name)))
-
 
 
 # Quit
