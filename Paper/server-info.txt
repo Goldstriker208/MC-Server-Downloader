@@ -1,0 +1,4 @@
+server-name = Paper
+mc-version = 1.16.5
+min-ram = 2
+max-ram = 2
