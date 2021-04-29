@@ -59,7 +59,7 @@ def dl_jar(paper_builds_url: str, mc_paper_versions_url: str, dest_folder: str, 
     readjson_paper_builds = readjson(paper_builds_data)
     readjson_paper_versions = readjson(mc_paper_versions_data)
 
-
+    global mc_paper_versions
     mc_paper_versions = readjson_paper_versions.versions + readjson_paper_versions.version_groups
 
     
@@ -92,21 +92,23 @@ def dl_jar(paper_builds_url: str, mc_paper_versions_url: str, dest_folder: str, 
     else:
         print("Invaild MC Version")
 
-from GUI import mc_version, server_name
+from GUI import mc_server_name, mc_server, mc_version, ram, eula
 
-eula = True
+if eula == 1:
+    eula = True
+else:
+    eula = False
+    print("Did not agree to eula")
+    sys.exit()
 
-# Convert lists to string
-mc_version = ''.join(mc_version)
-server_name = ''.join(server_name)
 
-print(mc_version)
 
-dest_folder = server_name
+
+dest_folder = mc_server_name
 
 # Set defualt ram
-min_ram = "2"
-max_ram = "2"
+min_ram = ram
+max_ram = ram
 
 # Variables and calls dl_jar function
 
@@ -127,14 +129,14 @@ dl_jar(paper_builds_url, mc_paper_versions_url, dest_folder, mc_version)
 
 # Creates batch file
 start_java = "java -Xms" + min_ram + "G -Xmx" + max_ram + "G -jar paper.jar nogui"
-myBat = open(server_name + "/" + "start.bat",'w+')
+myBat = open(mc_server_name + "/" + "start.bat",'w+')
 myBat.write(start_java)
 myBat.close()
 
 
 # Saves Minecraft Server Info
 file2write=open(dest_folder + "/" + "server-info.txt",'w')
-file2write.write("server-name = " + server_name)
+file2write.write("server-name = " + mc_server_name)
 file2write.write("\nmc-version = " + mc_version)
 file2write.write("\nmin-ram = " + min_ram)
 file2write.write("\nmax-ram = " + max_ram)
@@ -146,11 +148,11 @@ if eula == True:
     file2write.close()
 
 print("Open the batch file to start your Minecraft Server")
-print(os.path.abspath(server_name))
+print(os.path.abspath(mc_server_name))
 
 time.sleep(1)
-os.system("cd " + (os.path.abspath(server_name)))
-subprocess.Popen("explorer /select," + (os.path.abspath(server_name)))
+os.system("cd " + (os.path.abspath(mc_server_name)))
+subprocess.Popen("explorer /select," + (os.path.abspath(mc_server_name)))
 
 
 # Quit

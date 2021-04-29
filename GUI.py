@@ -1,150 +1,233 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+
 import tkinter as tk
-import tkinter.messagebox as msgbox
-import sys 
+from tkinter import *
+from tkinter import ttk
+# from tkinter.ttk import *
 
-global server_name
-global mc_version
-
-mc_version = []
-server_name = []
-
-class main_menu():
-    def __init__(self, master):
-        self.master = master
-        # self.btn = tk.Button(master, text="Button", command=self.command)
-        # self.btn.pack()
-        self.label_text = tk.StringVar()
-        self.label_text.set("Choose One")
-        self.label = tk.Label(master, textvar=self.label_text)
-        self.label.pack(fill=tk.BOTH, expand=1, padx=100, pady=30)
-
-        self.paper_button = tk.Button(master, text="Paper", command=self.open_paper_menu)
-        self.paper_button.pack(side=tk.LEFT, padx=(20, 0), pady=(0, 20))
-
-        self.vanilla_button = tk.Button(master, text="Vanilla", command=self.open_vanilla_menu)
-        self.vanilla_button.pack(side=tk.RIGHT, padx=(0, 20), pady=(0, 20))
-
-
-    def open_paper_menu(self):
-        self.master.withdraw()
-        toplevel = tk.Toplevel(self.master)
-        # toplevel.geometry("350x350")
-        app = paper_menu(toplevel)
-
-    def open_vanilla_menu(self):
-        self.master.withdraw()
-        toplevel = tk.Toplevel(self.master)
-        toplevel.geometry("350x350")
-        app = vanilla_menu(toplevel)
-
-class paper_menu:
-    def __init__(self, master):
-        self.master = master
-
-        self.label_text = tk.StringVar()
-        self.label_text.set("Minecraft Server Name: ")
-
-        self.name_text = tk.StringVar()
-
-        
-        self.label = tk.Label(master, textvar=self.label_text)
-        self.label.pack(fill=tk.BOTH, expand=1, padx=100, pady=10)
-
-        self.label2 = tk.Label(master, textvar=self.label_text)
-        self.label.pack(fill=tk.BOTH, expand=1, padx=100, pady=0)
-
-        self.name_entry = tk.Entry(master, textvar=self.name_text)
-        self.name_entry.pack(fill=tk.BOTH, expand=1, padx=20, pady=20)
-
-        next_button = tk.Button(master, text="Next", command=self.server_name)
-        next_button.pack(side=tk.RIGHT, padx=(0, 20), pady=(0, 20))
-
-
-    def server_name(self):
-        self.master.withdraw()
-        toplevel = tk.Toplevel(self.master)
-        app = paper_menu2(toplevel)
-        name = self.name_entry.get()
-        file2write=open("server-info.txt",'w')
-        file2write.write("server-name = " + name)
-        file2write.close()
-        server_name.append(name)
-        print("Minecraft Server Name: " + name)
-
-
-
-class paper_menu2:
-    def __init__(self, master):
-        self.master = master
-        self.label_text = tk.StringVar()
-        self.label_text.set("Minecraft Version: ")
-
-        self.name_text = tk.StringVar()
-
-        
-        self.label = tk.Label(master, textvar=self.label_text)
-        self.label.pack(fill=tk.BOTH, expand=1, padx=100, pady=10)
-
-        self.label2 = tk.Label(master, textvar=self.label_text)
-        self.label.pack(fill=tk.BOTH, expand=1, padx=100, pady=0)
-
-        self.name_entry = tk.Entry(master, textvar=self.name_text)
-        self.name_entry.pack(fill=tk.BOTH, expand=1, padx=20, pady=20)
-
-        next_button = tk.Button(master, text="Next", command=self.mc_version)
-        next_button.pack(side=tk.RIGHT, padx=(0, 20), pady=(0, 20))
-
-
-    def mc_version(self):
-        self.master.withdraw()
-        name = self.name_entry.get()
-        file2write=open("server-info.txt",'w')
-        file2write.write("\nmc-version = " + name)
-        file2write.close()
-        paper_menu2.eula(self)
-        name = self.name_entry.get()
-        mc_version.append(name)
-        print("Minecraft Version: " + name)
-
-       
-
-
-    def eula(self):
-        if msgbox.askyesno("Mojangs Eula", "Agree to Mojangs EULA?"):
-            # Yes
-            print("Agreed to EULA")
-            root.quit()
-        else:
-            # No
-            sys.exit()
-            root.quit()
-
-
-
-
-
-
-class vanilla_menu:
-    def __init__(self, master):
-        self.master = master
-        self.frame = tk.Frame(self.master)
-        self.quitButton = tk.Button(self.frame, text = '2Quit', width = 25, command = self.command)
-        self.quitButton.pack()
-        self.frame.pack()
-    def command(self):
-        self.master.withdraw()
-        toplevel = tk.Toplevel(self.master)
-        toplevel.geometry("350x350")
-        app = vanilla_menu(toplevel)
-
-
-
+global paper_jar
+global vanilla_jar
+paper_jar = False
+vanilla_jar = False
 
 root = tk.Tk()
 root.title("window")
-# root.geometry("350x350")
-cls = main_menu(root)
+# root.geometry("400x900")
+root.geometry("400x400")
+
+
+# MC Server Name Label
+label_text = tk.StringVar()
+label_text.set("Minecraft Server Name: ")
+
+name_text = tk.StringVar()
+
+
+
+label = tk.Label(root, textvar=label_text)
+label.pack(fill='x', padx=5, pady=5)
+
+name_entry = tk.Entry(root, textvar=name_text)
+name_entry.pack(fill='x', padx=100, pady=5)
+
+
+
+
+
+def paper():
+    # Set to MC Paper Versions
+    options = mc_paper_versions
+
+    # Reset var and delete all old options
+    menu.set('')
+    drop['menu'].delete(0, 'end')
+
+    # Insert list of new options (tk._setit hooks them up to var)
+    new_choices = options
+    for choice in new_choices:
+        drop['menu'].add_command(label=choice, command=tk._setit(menu, choice))
+        
+    global paper_jar
+    paper_jar = True
+    res.configure(text = "Selected: Paper")
+    print("Paper: " + str(paper_jar))
+
+
+    
+
+def vanilla():
+    # Set to MC Paper Versions
+    options = mc_vanilla_versions
+
+    # Reset var and delete all old options
+    menu.set('')
+    drop['menu'].delete(0, 'end')
+
+    # Insert list of new options (tk._setit hooks them up to var)
+    new_choices = options
+    for choice in new_choices:
+        drop['menu'].add_command(label=choice, command=tk._setit(menu, choice))
+        
+    global vanilla_jar
+    vanilla_jar = True
+    res.configure(text = "Selected: Vanilla")
+    print("Vanilla: " + str(vanilla_jar))
+
+# MC Server label
+label = ttk.Label(text="Choose your Minecraft Server")
+label.pack(fill='x', padx=100, pady=5)
+
+# Result Label
+res = tk.Label(root)
+res.pack()
+
+# MC Server Buttons
+paper_button = tk.Button(root, text="Paper", command=paper)
+paper_button.pack(fill = 'x', padx=(150), pady=(5))
+
+
+vanilla_button = tk.Button(root, text="Vanilla", command=vanilla)
+vanilla_button.pack(fill= 'x', padx=(150), pady=(5))
+
+# from dl_paper_jarNEW import mc_paper_versions
+
+mc_paper_versions = [
+    "Paper",
+    "1.9",
+    "1.10",
+    "1.11",
+    "1.12",
+    "1.13",
+    "1.14"
+]
+
+mc_vanilla_versions = [
+    "Vanilla",
+    "1.9",
+    "1.10",
+    "1.11",
+    "1.12",
+    "1.13",
+    "1.14"
+]
+dropmenu = [""]
+options = dropmenu
+options2 = ["d"]
+
+print("Paper: " + str(paper_jar))
+print("Vanilla: " + str(vanilla_jar))
+
+
+if paper_jar == True:
+    print("trtue")
+    options = mc_paper_versions
+
+label2 = ttk.Label(text="Select MC Version")
+label2.pack(fill='x', padx=100, pady=5)
+
+# MC Version Label
+menu= StringVar()
+# menu.set(mc_paper_versions[-1])
+menu.set("Select MC Version")
+
+
+# MC Version Dropdown Menu
+drop= OptionMenu(root, menu, *options)
+drop.pack(fill='x', padx=100, pady=5)
+
+
+
+
+# RAM Label
+label2 = ttk.Label(text="RAM Allocation")
+label2.pack(fill='x', padx=100, pady=5)
+
+# RAM Text Entry
+name_text2 = tk.StringVar()
+name_entry2 = tk.Entry(root, textvar=name_text2)
+name_entry2.pack(fill='x', padx=190, pady=5)
+
+# EULA Checkbox
+var1 = tk.IntVar()
+c1 = tk.Checkbutton(root, text='Agree to EULA', variable=var1, onvalue=1, offvalue=0)
+c1.pack()
+
+
+
+def returnvalues():
+    global mc_server_name
+    global mc_version
+    global ram
+    global eula
+    mc_server_name = name_entry.get()
+    mc_version = menu.get()
+    ram = name_entry2.get()
+    eula = var1.get()
+    print("MC Server Name: " + str(name_entry.get()))
+    print("Paper: " + str(paper_jar))
+    print("Vanilla: " + str(vanilla_jar))
+    print("MC Version: " + str(menu.get()))
+    print("Ram: " + str(name_entry2.get()))
+    print("EULA: " + str(var1.get()))
+
+
+
+
+    
+# Button
+next_button = tk.Button(root, text="Create MC Server", command=returnvalues)
+next_button.pack(side=tk.RIGHT, padx=(0, 20), pady=(0, 20))
+
+
+
+
+counter = 0
+
+
+def do_job():
+    global counter
+    l.config(text='do {0}'.format(counter))
+    counter += 1
+
+
+l = tk.Label(root, text='', bg='yellow')
+l.pack()
+
+m = tk.Menu(root)
+file_menu = tk.Menu(m, tearoff=0)
+m.add_cascade(label='File', menu=file_menu)
+file_menu.add_command(label='New', command=do_job)
+file_menu.add_command(label='Open', command=do_job)
+file_menu.add_command(label='Save', command=do_job)
+file_menu.add_separator()
+file_menu.add_command(label='Exit', command=root.quit)
+
+sub_menu = tk.Menu(file_menu)
+file_menu.add_cascade(label='Import', menu=sub_menu, underline=0)
+sub_menu.add_command(label='Submenu1', command=do_job)
+
+# edit_menu = tk.Menu(m, tearoff=0)
+# m.add_cascade(label='Edit', menu=edit_menu)
+# edit_menu.add_command(label='Cut', command=do_job)
+# edit_menu.add_command(label='Copy', command=do_job)
+# edit_menu.add_command(label='Paste', command=do_job)
+
+
+root.config(menu=m)
 root.mainloop()
 
-# print(server_name)
-# print(mc_version)
+if paper_jar == True:
+    mc_server = "Paper"
+elif vanilla_jar == True:
+    mc_server = "Vanilla"
+
+
+print(mc_server_name)
+print(mc_server)
+print(mc_version)
+print(ram)
+print(eula)
+
+
