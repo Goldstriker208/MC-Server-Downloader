@@ -5,6 +5,14 @@
 import tkinter as tk
 from tkinter import *
 from tkinter import ttk
+import requests
+import json
+import os
+import sys
+import shutil
+import subprocess
+import time
+
 # from tkinter.ttk import *
 
 global paper_jar
@@ -41,7 +49,7 @@ def paper():
     options = mc_paper_versions
 
     # Reset var and delete all old options
-    menu.set('')
+    menu.set('Select MC Version')
     drop['menu'].delete(0, 'end')
 
     # Insert list of new options (tk._setit hooks them up to var)
@@ -62,7 +70,7 @@ def vanilla():
     options = mc_vanilla_versions
 
     # Reset var and delete all old options
-    menu.set('')
+    menu.set('Select MC Version')
     drop['menu'].delete(0, 'end')
 
     # Insert list of new options (tk._setit hooks them up to var)
@@ -93,31 +101,109 @@ vanilla_button.pack(fill= 'x', padx=(150), pady=(5))
 
 # from dl_paper_jarNEW import mc_paper_versions
 
-mc_paper_versions = [
-    "Paper",
-    "1.9",
-    "1.10",
-    "1.11",
-    "1.12",
-    "1.13",
-    "1.14"
-]
+# from dl_paper_json import mc_paper_versions
+
+dest_folder = "jsons"
+
+
+try: 
+    os.remove("jsons/MC Paper Versions") 
+    print("% s removed successfully" % path) 
+except OSError as error: 
+    print(error) 
+    print("File path can not be removed") 
+
+
+
+
+
+# Variables and calls dl_jar function
+
+# JSON URLS
+mc_paper_versions_url = 'https://papermc.io/api/v2/projects/paper/'
+
+# File names
+mc_paper_versions_filename = "MC Paper Versions"
+
+#File paths
+mc_paper_versions_file_path = os.path.join(dest_folder, mc_paper_versions_filename)
+
+
+
+
+
+# Filepaths
+print("mc versions: " + mc_paper_versions_file_path)
+
+
+# Download Paper MC Versions JSON
+r = requests.get(mc_paper_versions_url, allow_redirects=True)
+print("Downloaded File: JSON " + mc_paper_versions_filename)
+
+# Save Paper MC Versions JSON to file path
+open(mc_paper_versions_file_path, 'wb').write(r.content)
+print("Saved JSON " + mc_paper_versions_filename + " to ", os.path.abspath(mc_paper_versions_file_path))
+with open(mc_paper_versions_file_path, 'r') as file:
+    mc_paper_versions_data = file.read().replace('\n', '')
+
+
+# Read JSON Files
+class readjson:
+    def __init__(self, json_def):
+        self.__dict__ = json.loads(json_def)
+
+readjson_paper_versions = readjson(mc_paper_versions_data)
+
+os.remove("jsons/MC Paper Versions")
+
+# MC Paper Version List
+global mc_paper_versions
+# mc_paper_versions = readjson_paper_versions.versions + readjson_paper_versions.version_groups
+mc_paper_versions = readjson_paper_versions.versions 
+
+# def check_vaild_mc_version():
+#     vaild_mc_version = None
+#     for mc_paper_version in mc_paper_versions:
+#         if mc_version == mc_paper_version:
+#             vaild_mc_version = True
+#             print("Vaild MC Paper Version")
+#             return True
+
+#     if mc_version != mc_paper_version: 
+#         return False
+#         sys.exit()
+        
+
+# if check_vaild_mc_version() == True:
+#     pass
+
+
+# else:
+#     print("Invaild MC Version")
+
+
+
+
+
+# mc_paper_versions = [
+#     "Paper",
+#     "1.9",
+#     "1.10",
+#     "1.11",
+#     "1.12",
+#     "1.13",
+#     "1.14"
+# ]
 
 mc_vanilla_versions = [
-    "Vanilla",
-    "1.9",
-    "1.10",
-    "1.11",
-    "1.12",
-    "1.13",
-    "1.14"
+    "",
 ]
 dropmenu = [""]
 options = dropmenu
 options2 = ["d"]
 
-print("Paper: " + str(paper_jar))
-print("Vanilla: " + str(vanilla_jar))
+# print("Paper: " + str(paper_jar))
+# print("Vanilla: " + str(vanilla_jar))
 
 
 if paper_jar == True:
@@ -171,6 +257,7 @@ def returnvalues():
     print("MC Version: " + str(menu.get()))
     print("Ram: " + str(name_entry2.get()))
     print("EULA: " + str(var1.get()))
+    root.quit()
 
 
 
@@ -192,8 +279,8 @@ def do_job():
     counter += 1
 
 
-l = tk.Label(root, text='', bg='yellow')
-l.pack()
+# l = tk.Label(root, text='', bg='yellow')
+# l.pack()
 
 m = tk.Menu(root)
 file_menu = tk.Menu(m, tearoff=0)
@@ -224,10 +311,10 @@ elif vanilla_jar == True:
     mc_server = "Vanilla"
 
 
-print(mc_server_name)
-print(mc_server)
-print(mc_version)
-print(ram)
-print(eula)
+# print(mc_server_name)
+# print(mc_server)
+# print(mc_version)
+# print(ram)
+# print(eula)
 
 
