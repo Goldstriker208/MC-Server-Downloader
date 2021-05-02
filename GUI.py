@@ -49,7 +49,7 @@ def paper():
     options = mc_paper_versions
 
     # Reset var and delete all old options
-    menu.set('Select MC Version')
+    menu.set('Select MC Paper Version')
     drop['menu'].delete(0, 'end')
 
     # Insert list of new options (tk._setit hooks them up to var)
@@ -70,7 +70,7 @@ def vanilla():
     options = mc_vanilla_versions
 
     # Reset var and delete all old options
-    menu.set('Select MC Version')
+    menu.set('Select MC Vanilla Version')
     drop['menu'].delete(0, 'end')
 
     # Insert list of new options (tk._setit hooks them up to var)
@@ -87,7 +87,7 @@ def vanilla():
 label = ttk.Label(text="Choose your Minecraft Server")
 label.pack(fill='x', padx=100, pady=5)
 
-# Result Label
+# MC Server Result Label
 res = tk.Label(root)
 res.pack()
 
@@ -105,27 +105,32 @@ vanilla_button.pack(fill= 'x', padx=(150), pady=(5))
 
 dest_folder = "jsons"
 
+try:
+    os.mkdir(dest_folder)
+except FileExistsError:
+    pass
 
 try: 
     os.remove("jsons/MC Paper Versions") 
-    print("% s removed successfully" % path) 
+    # print("% s removed successfully" % path) 
 except OSError as error: 
-    print(error) 
-    print("File path can not be removed") 
+    pass
+    # print(error) 
+    # print("File path can not be removed") 
 
 
 
 
 
-# Variables and calls dl_jar function
+# Variables 
 
-# JSON URLS
+# JSON URL
 mc_paper_versions_url = 'https://papermc.io/api/v2/projects/paper/'
 
-# File names
+# File name
 mc_paper_versions_filename = "MC Paper Versions"
 
-#File paths
+#File path
 mc_paper_versions_file_path = os.path.join(dest_folder, mc_paper_versions_filename)
 
 
@@ -147,7 +152,7 @@ with open(mc_paper_versions_file_path, 'r') as file:
     mc_paper_versions_data = file.read().replace('\n', '')
 
 
-# Read JSON Files
+# Read JSON File
 class readjson:
     def __init__(self, json_def):
         self.__dict__ = json.loads(json_def)
@@ -158,46 +163,13 @@ os.remove("jsons/MC Paper Versions")
 
 # MC Paper Version List
 global mc_paper_versions
-# mc_paper_versions = readjson_paper_versions.versions + readjson_paper_versions.version_groups
 mc_paper_versions = readjson_paper_versions.versions 
 
-# def check_vaild_mc_version():
-#     vaild_mc_version = None
-#     for mc_paper_version in mc_paper_versions:
-#         if mc_version == mc_paper_version:
-#             vaild_mc_version = True
-#             print("Vaild MC Paper Version")
-#             return True
-
-#     if mc_version != mc_paper_version: 
-#         return False
-#         sys.exit()
-        
-
-# if check_vaild_mc_version() == True:
-#     pass
-
-
-# else:
-#     print("Invaild MC Version")
-
-
-
-
-
-# mc_paper_versions = [
-#     "Paper",
-#     "1.9",
-#     "1.10",
-#     "1.11",
-#     "1.12",
-#     "1.13",
-#     "1.14"
-# ]
 
 mc_vanilla_versions = [
     "",
 ]
+
 dropmenu = [""]
 options = dropmenu
 options2 = ["d"]
@@ -207,16 +179,15 @@ options2 = ["d"]
 
 
 if paper_jar == True:
-    print("trtue")
     options = mc_paper_versions
 
-label2 = ttk.Label(text="Select MC Version")
-label2.pack(fill='x', padx=100, pady=5)
+label = tk.Label(text="Select MC Version")
+label.pack(fill='x', padx=100, pady=5)
 
-# MC Version Label
+# Intialize MC Version Label
 menu= StringVar()
 # menu.set(mc_paper_versions[-1])
-menu.set("Select MC Version")
+menu.set("Select MC Server First")
 
 
 # MC Version Dropdown Menu
@@ -227,18 +198,18 @@ drop.pack(fill='x', padx=100, pady=5)
 
 
 # RAM Label
-label2 = ttk.Label(text="RAM Allocation")
-label2.pack(fill='x', padx=100, pady=5)
+label = tk.Label(text="RAM Allocation")
+label.pack(fill='x', padx=100, pady=5)
 
 # RAM Text Entry
-name_text2 = tk.StringVar()
-name_entry2 = tk.Entry(root, textvar=name_text2)
-name_entry2.pack(fill='x', padx=190, pady=5)
+ram_text = tk.StringVar()
+ram_entry = tk.Entry(root, textvar=ram_text)
+ram_entry.pack(fill='x', padx=190, pady=5)
 
 # EULA Checkbox
-var1 = tk.IntVar()
-c1 = tk.Checkbutton(root, text='Agree to EULA', variable=var1, onvalue=1, offvalue=0)
-c1.pack()
+eula_output = tk.IntVar()
+eula_checkbox = tk.Checkbutton(root, text='Agree to EULA', variable=eula_output, onvalue=1, offvalue=0)
+eula_checkbox.pack()
 
 
 
@@ -249,14 +220,14 @@ def returnvalues():
     global eula
     mc_server_name = name_entry.get()
     mc_version = menu.get()
-    ram = name_entry2.get()
-    eula = var1.get()
+    ram = ram_entry.get()
+    eula = eula_output.get()
     print("MC Server Name: " + str(name_entry.get()))
     print("Paper: " + str(paper_jar))
     print("Vanilla: " + str(vanilla_jar))
     print("MC Version: " + str(menu.get()))
-    print("Ram: " + str(name_entry2.get()))
-    print("EULA: " + str(var1.get()))
+    print("Ram: " + str(ram_entry.get()))
+    print("EULA: " + str(eula_output.get()))
     root.quit()
 
 
