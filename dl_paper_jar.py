@@ -11,7 +11,6 @@ global paper_builds_file_path
 global mc_paper_versions_filename
 global mc_paper_versions_file_path
 
-
 global min_ram
 global max_ram
 

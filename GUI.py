@@ -225,7 +225,6 @@ drop.pack(fill='x', padx=100, pady=5)
 
 
 
-
 # RAM Label
 label2 = ttk.Label(text="RAM Allocation")
 label2.pack(fill='x', padx=100, pady=5)
