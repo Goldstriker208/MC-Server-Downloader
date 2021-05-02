@@ -1,5 +1,5 @@
 # Minecraft Server Downloader
-# Requirements
+# Install Required Python Modules
   ```sh
     pip install -r requirements.txt
   ```
