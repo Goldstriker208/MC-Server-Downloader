@@ -93,12 +93,13 @@ def dl_jar(paper_builds_url: str, mc_paper_versions_url: str, dest_folder: str, 
         print("Invaild MC Version")
 
 
-
+# from GUI import mc_server_name, mc_server, mc_version, ram, eula
 
 try: 
     from GUI import mc_server_name, mc_server, mc_version, ram, eula
 except ImportError and OSError as error: 
     sys.exit()
+
 
 
 

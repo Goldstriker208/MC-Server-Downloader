@@ -46,16 +46,16 @@ name_entry.pack(fill='x', padx=100, pady=5)
 
 def paper():
     # Set to MC Paper Versions
-    options = mc_paper_versions
+    drop_down_mc_list = mc_paper_versions
 
     # Reset var and delete all old options
-    menu.set('Select MC Paper Version')
+    drop_down_list.set('Select MC Paper Version')
     drop['menu'].delete(0, 'end')
 
     # Insert list of new options (tk._setit hooks them up to var)
-    new_choices = options
+    new_choices = drop_down_mc_list
     for choice in new_choices:
-        drop['menu'].add_command(label=choice, command=tk._setit(menu, choice))
+        drop['menu'].add_command(label=choice, command=tk._setit(drop_down_list, choice))
         
     global paper_jar
     paper_jar = True
@@ -67,16 +67,16 @@ def paper():
 
 def vanilla():
     # Set to MC Paper Versions
-    options = mc_vanilla_versions
+    drop_down_mc_list = mc_vanilla_versions
 
     # Reset var and delete all old options
-    menu.set('Select MC Vanilla Version')
+    drop_down_list.set('Select MC Vanilla Version')
     drop['menu'].delete(0, 'end')
 
     # Insert list of new options (tk._setit hooks them up to var)
-    new_choices = options
+    new_choices = drop_down_mc_list
     for choice in new_choices:
-        drop['menu'].add_command(label=choice, command=tk._setit(menu, choice))
+        drop['menu'].add_command(label=choice, command=tk._setit(drop_down_list, choice))
         
     global vanilla_jar
     vanilla_jar = True
@@ -84,7 +84,7 @@ def vanilla():
     print("Vanilla: " + str(vanilla_jar))
 
 # MC Server label
-label = ttk.Label(text="Choose your Minecraft Server")
+label = tk.Label(text="Choose your Minecraft Server")
 label.pack(fill='x', padx=100, pady=5)
 
 # MC Server Result Label
@@ -117,8 +117,6 @@ except OSError as error:
     pass
     # print(error) 
     # print("File path can not be removed") 
-
-
 
 
 
@@ -170,35 +168,37 @@ mc_vanilla_versions = [
     "",
 ]
 
-dropmenu = [""]
-options = dropmenu
-options2 = ["d"]
 
-# print("Paper: " + str(paper_jar))
-# print("Vanilla: " + str(vanilla_jar))
+
+
 
 
 if paper_jar == True:
-    options = mc_paper_versions
+    drop_down_mc_list = mc_paper_versions
 
 label = tk.Label(text="Select MC Version")
 label.pack(fill='x', padx=100, pady=5)
 
-# Intialize MC Version Label
-menu= StringVar()
+# Intialize MC Server Version Drop Down List
+drop_down_list= StringVar()
+drop_down_list.set("Select MC Server First")
 # menu.set(mc_paper_versions[-1])
-menu.set("Select MC Server First")
+drop_down_list_item = [""]
+drop_down_mc_list = drop_down_list_item
 
 
-# MC Version Dropdown Menu
-drop= OptionMenu(root, menu, *options)
+
+
+
+# MC Server Dropdown Menu
+drop= OptionMenu(root, drop_down_list, *drop_down_mc_list)
 drop.pack(fill='x', padx=100, pady=5)
 
 
 
 
 # RAM Label
-label = tk.Label(text="RAM Allocation")
+label = tk.Label(text="Dedicated RAM in GB's")
 label.pack(fill='x', padx=100, pady=5)
 
 # RAM Text Entry
@@ -219,13 +219,13 @@ def returnvalues():
     global ram
     global eula
     mc_server_name = name_entry.get()
-    mc_version = menu.get()
+    mc_version = drop_down_list.get()
     ram = ram_entry.get()
     eula = eula_output.get()
     print("MC Server Name: " + str(name_entry.get()))
     print("Paper: " + str(paper_jar))
     print("Vanilla: " + str(vanilla_jar))
-    print("MC Version: " + str(menu.get()))
+    print("MC Version: " + str(drop_down_list.get()))
     print("Ram: " + str(ram_entry.get()))
     print("EULA: " + str(eula_output.get()))
     root.quit()
