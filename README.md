@@ -1,7 +1,7 @@
 # Minecraft Server Downloader
 # Requirements
   ```sh
-  py -m pip install requests
+    pip install -r requirements.txt
   ```
 
 
