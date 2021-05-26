@@ -1,9 +1,9 @@
 import requests
 import json
-import os
-import sys
+import os, sys, stat
 import shutil
 import subprocess
+from sys import platform
 import time
 
 global paper_builds_filename
@@ -136,13 +136,26 @@ mc_paper_versions_file_path = os.path.join(dest_folder, mc_paper_versions_filena
 
 dl_jar(paper_builds_url, mc_paper_versions_url, dest_folder, mc_version)
 
-
-# Creates batch file
+# Start Java
 start_java = "java -Xms" + min_ram + "G -Xmx" + max_ram + "G -jar paper.jar nogui"
-myBat = open(mc_server_name + "/" + "start.bat",'w+')
+
+# Creates batch script file
+
+myBat = open(mc_server_name + "/start.bat",'w+')
 myBat.write(start_java)
 myBat.close()
 
+# Creates shell script file
+myBat = open(mc_server_name + "/" + "start.sh",'w+')
+myBat.write("#!/bin/sh\n")
+myBat.write('cd "$(dirname "$0")"\n')
+myBat.write("")
+myBat.write(start_java)
+myBat.close()
+#os.chmod(mc_server_name + "/start.sh", stat.S_IRWXO )
+
+st = os.stat(mc_server_name + "/start.sh")
+os.chmod(mc_server_name + "/start.sh", st.st_mode | stat.S_IEXEC)
 
 # Saves Minecraft Server Info
 file2write=open(dest_folder + "/" + "server-info.txt",'w')
@@ -157,12 +170,21 @@ if eula == True:
     file2write.write("eula=true")
     file2write.close()
 
-print("Open the batch file to start your Minecraft Server")
+print("Open the batch script or shell script file to start your Minecraft Server")
 print(os.path.abspath(mc_server_name))
 
 time.sleep(1)
 os.system("cd " + (os.path.abspath(mc_server_name)))
-subprocess.Popen("explorer /select," + (os.path.abspath(mc_server_name)))
+
+
+
+if platform == "linux":
+    pass
+elif platform == "darwin":
+    pass
+elif platform == "win32":
+    subprocess.Popen("explorer /select," + (os.path.abspath(mc_server_name)))
+
 
 
 # Quit
