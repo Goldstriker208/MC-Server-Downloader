@@ -1,5 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import os
+import sys
+import platform
+import time
+
+if platform.system() == 'Darwin':
+    if platform.machine().startswith('iP'):
+        # iOS
+        print('You are running on iOS!')
+        print('Please use the cli instead of the gui (tkinter) is not supported on iOS!')
+        print('Exiting...')
+        time.sleep(2)
+        sys.exit()
+    else:
+        # Mac OS X
+        pass
 
 
 import tkinter as tk
@@ -7,11 +23,9 @@ from tkinter import *
 from tkinter import ttk
 import requests
 import json
-import os
-import sys
 import shutil
 import subprocess
-import time
+
 
 # from tkinter.ttk import *
 
@@ -210,7 +224,6 @@ ram_entry.pack(fill='x', padx=190, pady=5)
 eula_output = tk.IntVar()
 eula_checkbox = tk.Checkbutton(root, text='Agree to EULA', variable=eula_output, onvalue=1, offvalue=0)
 eula_checkbox.pack()
-
 
 
 def returnvalues():
