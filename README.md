@@ -40,7 +40,14 @@ Doregon's Repo:  https://doregon.github.io/cydia
 7. Change directory to ```cd MC-Server-Downloader```
 8. Run the MC Server Downloader by typing in ```python3 CLI.py```
 
-## Run MC Server Downloader Via SSH
-```ssh mobile@your-devices-local-ip  
+## Run MC Server Downloader Via SSH (recommended)
+In macOS/Linux Terminal type:
+```ssh mobile@your-device's-local-ip```   
+
+On Windows use the program [PuTTY](https://www.putty.org/) 
+
+Hostname: Your device's local ip  
+Login: mobile  
 Default Password: alpine  
-Repeat the same steps as on NewTerm 2
+
+Repeat the same steps as on NewTerm 2  
