@@ -15,7 +15,11 @@ CLI:
 GUI:    
 ```python dl_paper_jar.py```  
   
-  
+# Dependencies for Linux  
+## Arch  
+```sudo pacman -S tk```  
+## Debian  
+```sudo apt-get install python-tk```  
   
 
 # Run MC Server Downloader on iOS (Jailbreak Required)
