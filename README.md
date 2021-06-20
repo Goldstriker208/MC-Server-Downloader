@@ -8,21 +8,39 @@
   ```sh
     pip3 install -r requirements.txt
   ```
+## Run MC Server Downloader  
+CLI:      
+```python CLI.py```  
 
-## Install Required Tweaks (iOS Jailbreak Only)
-Install these tweaks on Cydia or Sileo:  
-[NewTerm 2](https://chariz.com/get/newterm)  
-[Filza File Manager](http://cydia.saurik.com/package/com.tigisoftware.filza/)   
-[OpenJDK 16 - Runtime](https://doregon.github.io/cydia)   
-Git  
-OpenSSH (optional but recommend)  
+GUI:    
+```python dl_paper_jar.py```  
+  
+  
+  
 
-OpenJDK 16 / PojavLauncher Repo:  https://doregon.github.io/cydia
+# Run MC Server Downloader on iOS (Jailbreak Required)
+## Install Required Tweaks 
+Install these tweaks on Cydia or Sileo:   
+[NewTerm 2](https://chariz.com/get/newterm) (Chariz Repo)  
+[Filza File Manager](http://cydia.saurik.com/package/com.tigisoftware.filza/) (Big Boss Repo)  
+[OpenJDK 16 - Runtime](https://doregon.github.io/cydia) (Doregon's Repo)  
+Git (Sam Bingner's Repo)   
+OpenSSH (Sam Bingner's Repo)   
+nano (Sam Bingner's Repo)  
 
+Doregon's Repo:  https://doregon.github.io/cydia
+
+## Run MC Server Downloader on iOS Terminal
 1. Open NewTerm 2
-2. Become Super User type ```su``` Defualt password: alpine
+2. Become super user type ```su``` Default password: alpine
 3. Edit /etc/profile in nano  ```nano /etc/profile```
 4. Set Java PATH: add /usr/lib/jvm/java-16-openjdk/bin/ to PATH Variable
 5. Save and Quit
 6. ```git clone https://github.com/Goldstriker208/MC-Server-Downloader.git```
-7. 
+7. Change directory to ```cd MC-Server-Downloader```
+8. Run the MC Server Downloader by typing in ```python3 CLI.py```
+
+## Run MC Server Downloader Via SSH
+```ssh mobile@your-devices-local-ip  
+Default Password: alpine  
+Repeat the same steps as on NewTerm 2
