@@ -30,7 +30,7 @@ Install these tweaks on Cydia or Sileo:
 [OpenJDK 16 - Runtime](https://doregon.github.io/cydia) (Doregon's Repo)  
 Git (Sam Bingner's Repo)   
 OpenSSH (Sam Bingner's Repo)   
-nano (Sam Bingner's Repo)
+nano (Sam Bingner's Repo)  
 Python 3.7  
 
 Doregon's Repo:  https://doregon.github.io/cydia
