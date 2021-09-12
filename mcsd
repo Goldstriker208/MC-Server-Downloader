@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+PATH="${PATH}:/usr/xpg4/bin:/usr/sbin:/sbin:/usr/etc:/usr/libexec"
+
+DIR="~/Documents/MC-Server-Downloader"
+
+if [ -d "$DIR" ]; then
+  # Take action if $DIR exists. #
+  echo "Directory ${DIR} already exists"
+  cd $DIR
+  python3 -m ensurepip
+  pip3 install --user -r requirements.txt
+  python3 CLI.py
+else
+  cd ~/Documents
+  git clone "https://github.com/Goldstriker208/MC-Server-Downloader.git"
+  cd MC-Server-Downloader
+  python3 -m ensurepip
+  pip3 install --user -r requirements.txt
+  python3 CLI.py
+fi
