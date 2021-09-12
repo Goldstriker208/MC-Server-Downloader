@@ -27,23 +27,26 @@ GUI:
 Install these tweaks on Cydia or Sileo:   
 [NewTerm 2](https://chariz.com/get/newterm) (Chariz Repo)  
 [Filza File Manager](http://cydia.saurik.com/package/com.tigisoftware.filza/) (Big Boss Repo)  
-[OpenJDK 16 - Runtime](https://doregon.github.io/cydia) (Doregon's Repo)  
+[OpenJDK 16 - Runtime](https://doregon.github.io/cydia) (Doregon's Repo)   
+Python 3.7 (Sam Bingner's Repo)    
 Git (Sam Bingner's Repo)   
 OpenSSH (Sam Bingner's Repo)   
 nano (Sam Bingner's Repo)  
-Python 3.7  
+ 
 
 Doregon's Repo:  https://doregon.github.io/cydia
 
 ## Run MC Server Downloader on iOS Terminal
 1. Open NewTerm 2
-2. Become super user type ```su``` Default password: alpine
-3. Edit /etc/profile in nano  ```nano /etc/profile```
-4. Set Java PATH: add /usr/lib/jvm/java-16-openjdk/bin/ to PATH Variable
-5. Save and Quit
-6. ```git clone https://github.com/Goldstriker208/MC-Server-Downloader.git```
-7. Change directory to ```cd MC-Server-Downloader```
-8. Run the MC Server Downloader by typing in ```python3 CLI.py```
+3. Become super user type ```su``` Default password: alpine
+4. Get pip3 by typing in ```python3 -m ensurepip```
+6. Edit /etc/profile in nano  ```nano /etc/profile```
+7. Set Java PATH: add /usr/lib/jvm/java-16-openjdk/bin/ to PATH Variable
+8. Save and Quit
+9. ```git clone https://github.com/Goldstriker208/MC-Server-Downloader.git```
+10. Change directory to ```cd MC-Server-Downloader```
+11. Install needed modules by typing in ```pip3 install -r requirements.txt```
+12. Run the MC Server Downloader by typing in ```python3 CLI.py```
 
 ## Run MC Server Downloader Via SSH (recommended)
 In macOS/Linux Terminal type:
