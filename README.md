@@ -31,7 +31,7 @@ Install these tweaks on Cydia or Sileo:
 Git (Sam Bingner's Repo)   
 OpenSSH (Sam Bingner's Repo)   
 nano (Sam Bingner's Repo)
-Python 3.7
+Python 3.7  
 
 Doregon's Repo:  https://doregon.github.io/cydia
 
