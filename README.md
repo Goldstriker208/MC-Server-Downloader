@@ -27,7 +27,7 @@ GUI:
 Install these tweaks on Cydia or Sileo:   
 [NewTerm 2](https://chariz.com/get/newterm) (Chariz Repo)  
 [Filza File Manager](http://cydia.saurik.com/package/com.tigisoftware.filza/) (Big Boss Repo)  
-[OpenJDK 16 - Runtime](https://doregon.github.io/cydia) (Doregon's Repo)   
+[OpenJDK 16 - Runtime](https://repo.doregon.gq/) (Doregon's Repo) - If the repo doesn't work download it from [here](https://github.com/PojavLauncherTeam/PojavLauncher_iOS/releases/tag/v16-openjdk) Then open in Sileo or Filza to install it   
 Python 3.7 (Sam Bingner's Repo)    
 Git (Sam Bingner's Repo)   
 OpenSSH (Sam Bingner's Repo)   
