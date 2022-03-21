@@ -38,7 +38,7 @@ Doregon's Repo:  https://doregon.github.io/cydia
 
 ## Run MC Server Downloader on iOS Terminal
 1. Open NewTerm 2
-3. Become super user type ```su``` Default password: alpine
+3. Switch to root type ```su``` Default password: alpine
 4. Get pip3 by typing in ```python3 -m ensurepip```
 6. Edit /etc/profile in nano  ```nano /etc/profile```
 7. Set Java PATH: add /usr/lib/jvm/java-16-openjdk/bin/ to PATH Variable
