@@ -1,191 +1,172 @@
 import requests
 import json
-import os, sys, stat
+import os
+import sys
+import stat
 import shutil
 import subprocess
 from sys import platform
 import time
+import urllib.request
+from urllib.error import HTTPError, URLError
 
-global paper_builds_filename
-global paper_builds_file_path
-global mc_paper_versions_filename
-global mc_paper_versions_file_path
+class MinecraftServerSetup:
+    def __init__(self, mc_server_name, mc_version, ram, eula):
+        self.mc_server_name = mc_server_name
+        self.mc_version = mc_version
+        self.ram = ram
+        self.eula = eula
 
+        # File names
+        self.paper_builds_filename = "Paper Builds"
+        self.mc_paper_versions_filename = "MC Paper Versions"
 
-global min_ram
-global max_ram
+        # File paths
+        self.paper_builds_file_path = os.path.join(self.mc_server_name, self.paper_builds_filename)
+        self.mc_paper_versions_file_path = os.path.join(self.mc_server_name, self.mc_paper_versions_filename)
 
+        # URLs
+        self.paper_builds_url = f'https://papermc.io/api/v2/projects/paper/versions/{self.mc_version}'
+        self.mc_paper_versions_url = 'https://papermc.io/api/v2/projects/paper/'
 
-# Download Paper Jar file
-def dl_jar(paper_builds_url: str, mc_paper_versions_url: str, dest_folder: str, mc_version: str):
+        # Variables
+        self.min_ram = self.ram
+        self.max_ram = self.ram
+        self.mc_paper_versions = None
+        self.readjson_paper_builds = None
 
-    # Create Minecraft Server folder
-    if not os.path.exists(dest_folder):
-        os.makedirs(dest_folder)  # create folder if it does not exist
-        print("Created Folder: " + dest_folder)
+    def create_server_folder(self):
+        if not os.path.exists(self.mc_server_name):
+            os.makedirs(self.mc_server_name)
+            print("Created Folder:", self.mc_server_name)
 
+    def download_json(self, url, filename, file_path):
+        r = requests.get(url, allow_redirects=True)
+        print(f"Downloaded File: JSON {filename}")
+        open(file_path, 'wb').write(r.content)
+        print(f"Saved JSON {filename} to", os.path.abspath(file_path))
+        with open(file_path, 'r') as file:
+            return file.read().replace('\n', '')
 
-    # Download Paper Builds JSON
-    r = requests.get(paper_builds_url, allow_redirects=True)
-    print("Downloaded File: JSON " + paper_builds_filename)
+    def read_json(self, json_data):
+        class ReadJson:
+            def __init__(self, json_def):
+                self.__dict__ = json.loads(json_def)
+        return ReadJson(json_data)
 
-    # Save Paper Builds JSON to file path
-    open(paper_builds_file_path, 'wb').write(r.content)
-    print("Saved JSON " + paper_builds_filename + " to ", os.path.abspath(paper_builds_file_path))
-    with open(paper_builds_file_path, 'r') as file:
-        paper_builds_data = file.read().replace('\n', '')
+    def dl_jar(self):
+        # Create Minecraft Server folder
+        self.create_server_folder()
 
+        # Download Paper Builds JSON
+        paper_builds_data = self.download_json(self.paper_builds_url, self.paper_builds_filename,
+                                               self.paper_builds_file_path)
 
-    # Filepaths
-    print("mc versions: " + mc_paper_versions_file_path)
-    print("paper builds: " + paper_builds_file_path)
+        # Download Paper MC Versions JSON
+        mc_paper_versions_data = self.download_json(self.mc_paper_versions_url, self.mc_paper_versions_filename,
+                                                    self.mc_paper_versions_file_path)
 
-    # Download Paper MC Versions JSON
-    r = requests.get(mc_paper_versions_url, allow_redirects=True)
-    print("Downloaded File: JSON " + mc_paper_versions_filename)
+        # Read JSON Files
+        self.readjson_paper_builds = self.read_json(paper_builds_data)
+        readjson_paper_versions = self.read_json(mc_paper_versions_data)
 
-    # Save Paper MC Versions JSON to file path
-    open(mc_paper_versions_file_path, 'wb').write(r.content)
-    print("Saved JSON " + mc_paper_versions_filename + " to ", os.path.abspath(mc_paper_versions_file_path))
-    with open(mc_paper_versions_file_path, 'r') as file:
-        mc_paper_versions_data = file.read().replace('\n', '')
+        self.mc_paper_versions = readjson_paper_versions.versions + readjson_paper_versions.version_groups
 
+        # Return mc_paper_versions and readjson_paper_builds
+        return self.mc_paper_versions, self.readjson_paper_builds
 
-    # Read JSON Files
-    class readjson:
-        def __init__(self, json_def):
-            self.__dict__ = json.loads(json_def)
-
-    readjson_paper_builds = readjson(paper_builds_data)
-    readjson_paper_versions = readjson(mc_paper_versions_data)
-
-    global mc_paper_versions
-    mc_paper_versions = readjson_paper_versions.versions + readjson_paper_versions.version_groups
-
-    
-    def check_vaild_mc_version():
-        vaild_mc_version = None
-        for mc_paper_version in mc_paper_versions:
-            if mc_version == mc_paper_version:
-                vaild_mc_version = True
-                print("Vaild MC Paper Version")
-                return True
-
-        if mc_version != mc_paper_version: 
-            return False
-            sys.exit()
-            
-
-    if check_vaild_mc_version() == True:
-
-        # Download Latest Paper Build
-        latest_build = readjson_paper_builds.builds[-1]
-        print("Downloading Latest Build: " + str(latest_build))
-        jar_file = "paper-" + mc_version + "-" + str(latest_build) + ".jar"
-        dl_paper_jar = "https://papermc.io/api/v2/projects/paper/versions/" + str(mc_version) + "/builds/" + str(latest_build) + "/downloads/" + jar_file
+    def download_latest_paper_build(self):
+        # Get the latest build number
+        latest_build = self.readjson_paper_builds.builds[-1]
+        print("Downloading Latest Build:", latest_build)
+        jar_file = f"paper-{self.mc_version}-{latest_build}.jar"
+        dl_paper_jar = f"https://papermc.io/api/v2/projects/paper/versions/{self.mc_version}/builds/{latest_build}/downloads/{jar_file}"
         r = requests.get(dl_paper_jar, allow_redirects=True)
-        print("Downloaded: " + jar_file)
-        open(dest_folder + "/" + jar_file, 'wb').write(r.content)
-        print("Saved " + jar_file + " to", os.path.abspath(paper_builds_file_path))
-        os.rename(dest_folder + "/" + jar_file, dest_folder + "/" + "paper.jar")
+        print("Downloaded:", jar_file)
 
-    else:
-        print("Invaild MC Version")
+        # Save the JAR file
+        jar_path = os.path.join(self.mc_server_name, jar_file)
+        open(jar_path, 'wb').write(r.content)
+        print("Saved", jar_file, "to", os.path.abspath(jar_path))
 
+        # Rename to "paper.jar"
+        os.rename(jar_path, os.path.join(self.mc_server_name, "paper.jar"))
 
-# from GUI import mc_server_name, mc_server, mc_version, ram, eula
+    def check_valid_mc_version(self):
+        for mc_paper_version in self.mc_paper_versions:
+            if self.mc_version == mc_paper_version:
+                print("Valid MC Paper Version")
+                return True
+        return False
 
-try: 
-    from GUI import mc_server_name, mc_server, mc_version, ram, eula
-except ImportError and OSError as error: 
-    sys.exit()
+    def start_server(self):
+        # Start Java
+        start_java = f"java -Xms{self.min_ram}G -Xmx{self.max_ram}G -jar paper.jar nogui"
 
+        # Creates batch script file
+        with open(os.path.join(self.mc_server_name, "start.bat"), 'w+') as my_bat:
+            my_bat.write(start_java)
 
+        # Creates shell script file
+        with open(os.path.join(self.mc_server_name, "start.sh"), 'w+') as my_bat:
+            my_bat.write("#!/bin/sh\n")
+            my_bat.write(f'cd "$(dirname "$0")"\n\n')
+            my_bat.write(start_java)
 
+        st = os.stat(os.path.join(self.mc_server_name, "start.sh"))
+        os.chmod(os.path.join(self.mc_server_name, "start.sh"), st.st_mode | stat.S_IEXEC)
 
+        # Saves Minecraft Server Info
+        with open(os.path.join(self.mc_server_name, "server-info.txt"), 'w') as file2write:
+            file2write.write(f"server-name = {self.mc_server_name}\n")
+            file2write.write(f"mc-version = {self.mc_version}\n")
+            file2write.write(f"min-ram = {self.min_ram}\n")
+            file2write.write(f"max-ram = {self.max_ram}\n")
 
-if eula == 1:
-    eula = True
-else:
-    eula = False
-    print("Did not agree to eula")
-    sys.exit()
+        if self.eula:
+            with open(os.path.join(self.mc_server_name, "eula.txt"), 'w') as file2write:
+                file2write.write("eula=true\n")
 
+        print("Open the batch script or shell script file to start your Minecraft Server")
+        print(os.path.abspath(self.mc_server_name))
 
+        time.sleep(1)
+        os.system(f"cd {os.path.abspath(self.mc_server_name)}")
 
+        # if platform == "win32":
+        #     subprocess.Popen(f"explorer /select,{os.path.abspath(self.mc_server_name)}")
+        if platform == "win32":
+            explorer_command = f"explorer /select,{os.path.abspath(self.mc_server_name)}"
+            subprocess.Popen(explorer_command, shell=True)
 
-dest_folder = mc_server_name
+            # Wait for the File Explorer to open
+            time.sleep(2)
 
-# Set defualt ram
-min_ram = ram
-max_ram = ram
+            # Execute the start.bat file
+            start_bat_path = os.path.join(self.mc_server_name, "start.bat")
+            subprocess.Popen([start_bat_path], shell=True)
 
-# Variables and calls dl_jar function
+        sys.exit()
 
-# JSON URLS
-paper_builds_url = 'https://papermc.io/api/v2/projects/paper/versions/' + mc_version
-mc_paper_versions_url = 'https://papermc.io/api/v2/projects/paper/'
+if __name__ == "__main__":
+    try:
+        from GUI import mc_server_name, mc_version, ram, eula
+    except ImportError and OSError as error:
+        sys.exit()
 
-# File names
-paper_builds_filename = "Paper Builds"
-mc_paper_versions_filename = "MC Paper Versions"
+    minecraft_server_setup = MinecraftServerSetup(
+        mc_server_name=mc_server_name,
+        mc_version=mc_version,
+        ram=ram,
+        eula=eula
+    )
 
-#File paths
-paper_builds_file_path = os.path.join(dest_folder, paper_builds_filename)
-mc_paper_versions_file_path = os.path.join(dest_folder, mc_paper_versions_filename)
+    mc_paper_versions, readjson_paper_builds = minecraft_server_setup.dl_jar()
 
-dl_jar(paper_builds_url, mc_paper_versions_url, dest_folder, mc_version)
+    if not minecraft_server_setup.check_valid_mc_version():
+        print("Invalid MC Version")
+        sys.exit()
 
-# Start Java
-start_java = "java -Xms" + min_ram + "G -Xmx" + max_ram + "G -jar paper.jar nogui"
+    minecraft_server_setup.download_latest_paper_build()
 
-# Creates batch script file
-
-myBat = open(mc_server_name + "/start.bat",'w+')
-myBat.write(start_java)
-myBat.close()
-
-# Creates shell script file
-myBat = open(mc_server_name + "/" + "start.sh",'w+')
-myBat.write("#!/bin/sh\n")
-myBat.write('cd "$(dirname "$0")"\n')
-myBat.write("")
-myBat.write(start_java)
-myBat.close()
-#os.chmod(mc_server_name + "/start.sh", stat.S_IRWXO )
-
-st = os.stat(mc_server_name + "/start.sh")
-os.chmod(mc_server_name + "/start.sh", st.st_mode | stat.S_IEXEC)
-
-# Saves Minecraft Server Info
-file2write=open(dest_folder + "/" + "server-info.txt",'w')
-file2write.write("server-name = " + mc_server_name)
-file2write.write("\nmc-version = " + mc_version)
-file2write.write("\nmin-ram = " + min_ram)
-file2write.write("\nmax-ram = " + max_ram)
-file2write.close()
-
-if eula == True:
-    file2write=open(dest_folder + "/" + "eula.txt",'w')
-    file2write.write("eula=true")
-    file2write.close()
-
-print("Open the batch script or shell script file to start your Minecraft Server")
-print(os.path.abspath(mc_server_name))
-
-time.sleep(1)
-os.system("cd " + (os.path.abspath(mc_server_name)))
-
-
-
-if platform == "linux":
-    pass
-elif platform == "darwin":
-    pass
-elif platform == "win32":
-    subprocess.Popen("explorer /select," + (os.path.abspath(mc_server_name)))
-
-
-
-# Quit
-sys.exit()
+    minecraft_server_setup.start_server()

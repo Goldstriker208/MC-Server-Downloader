@@ -210,7 +210,6 @@ drop.pack(fill='x', padx=100, pady=5)
 
 
 
-
 # RAM Label
 label = tk.Label(text="Dedicated RAM in GB's")
 label.pack(fill='x', padx=100, pady=5)
